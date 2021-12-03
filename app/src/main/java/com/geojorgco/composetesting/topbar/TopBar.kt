@@ -19,7 +19,7 @@ import androidx.compose.ui.res.colorResource
 import com.geojorgco.composetesting.R
 
 @Composable
-fun TopBar(isShowing: MutableState<Boolean>) {
+fun TopBar(isShowing: MutableState<Boolean>, name : MutableState<String>) {
     TopAppBar(
         navigationIcon = {
             IconButton(onClick = {isShowing.value = !isShowing.value}) {
@@ -33,7 +33,7 @@ fun TopBar(isShowing: MutableState<Boolean>) {
         title = {
             Box(modifier = Modifier.fillMaxWidth()) {
                 Text(
-                    text = "Baloto",
+                    text = name.value,
                     color = Color.White,
                     modifier = Modifier.align(Alignment.Center)
                 )

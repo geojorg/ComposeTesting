@@ -3,21 +3,29 @@ package com.geojorgco.composetesting
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.*
 import androidx.compose.animation.core.*
-import androidx.compose.material.*
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Surface
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntOffset
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.compose.currentBackStackEntryAsState
+
 import com.geojorgco.composetesting.topbar.TopBar
 import com.geojorgco.composetesting.ui.theme.ComposeTestingTheme
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.composable
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import java.util.concurrent.TimeUnit
 
+@ExperimentalAnimationApi
 @ExperimentalComposeUiApi
 class MainActivity : ComponentActivity() {
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,30 +61,77 @@ fun MenuDrawer(navController: NavHostController, isShowing: MutableState<Boolean
         targetValue = if (isShowing.value) 0.8f else 1f,
         animationSpec = tween(durationMillis = 200,easing = LinearEasing)
     )
-
-
-
         ViewS(isShowing, algoAnimation, menuAnimation)
     }
 
 
+@ExperimentalAnimationApi
 @Composable
 fun Navigation(content : @Composable() () -> Unit) {
-    val navController = rememberNavController()
+    val navController = rememberAnimatedNavController()
     val isShowing = remember { mutableStateOf(false) }
+    val name = remember { mutableStateOf("Baloto")}
+    var topBarv : @Composable() () -> Unit = {TopBar(isShowing, name)}
+
+    val currentRoute = navController.currentBackStackEntry?.destination?.route
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+
+    val name2 = remember { mutableStateOf("Revancha")}
+
+
+    when (navBackStackEntry?.destination?.route){
+        "principal"->{
+            topBarv = { TopBar(isShowing, name) }
+        }
+        "page2"->{
+            topBarv = { TopBar(isShowing, name2) }
+        }
+    }
+
     Scaffold(
-        topBar = { TopBar(isShowing) }
+
+            topBar = { topBarv() }
+
+
     ) {
         Menu(
             showmenu = { isShowing.value = false },
             navController = navController
         )
 
-        NavHost(navController = navController, startDestination = "principal") {
-            composable("principal") {
+        AnimatedNavHost(navController = navController, startDestination = "principal") {
+            composable(
+                route = "principal",
+                exitTransition =  {_,_ ->
+                    slideOutHorizontally(targetOffsetX = {-1000}, animationSpec = tween(
+                        durationMillis = 400,
+                        easing = FastOutSlowInEasing
+                    ))
+                },
+                popEnterTransition = {_,_ ->
+                    slideInHorizontally( initialOffsetX   = {-1000}, animationSpec = tween(
+                        durationMillis = 400,
+                        easing = FastOutSlowInEasing
+                    ))
+                }
+            ) {
                 MenuDrawer(navController, isShowing)
             }
-            composable("page2") {
+            composable(
+                route = "page2",
+                enterTransition =  {_,_ ->
+                    slideInHorizontally( initialOffsetX   = {1000}, animationSpec = tween(
+                        durationMillis = 400,
+                        easing = FastOutSlowInEasing
+                    ))
+                },
+                popExitTransition = {_,_ ->
+                    slideOutHorizontally(targetOffsetX = {1000}, animationSpec = tween(
+                        durationMillis = 400,
+                        easing = FastOutSlowInEasing
+                    ))
+                }
+            ) {
                 Page2()
                 isShowing.value = false
             }
