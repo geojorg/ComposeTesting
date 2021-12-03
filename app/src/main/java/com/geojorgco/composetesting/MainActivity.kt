@@ -1,7 +1,6 @@
 package com.geojorgco.composetesting
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.core.*
@@ -9,9 +8,11 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
-import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.geojorgco.composetesting.topbar.TopBar
 import com.geojorgco.composetesting.ui.theme.ComposeTestingTheme
 
@@ -24,7 +25,9 @@ class MainActivity : ComponentActivity() {
             ComposeTestingTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-                    MenuDrawer()
+                    Navigation(){
+
+                    }
                 }
             }
         }
@@ -32,12 +35,10 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MenuDrawer(){
+fun MenuDrawer(navController: NavHostController, isShowing: MutableState<Boolean>) {
 
-    val isShowing = remember { mutableStateOf(false) }
+
     val geo = LocalDensity.current.density
-
-
 
     val algoAnimation by animateIntOffsetAsState(
         targetValue = if (isShowing.value)
@@ -53,17 +54,40 @@ fun MenuDrawer(){
         animationSpec = tween(durationMillis = 200,easing = LinearEasing)
     )
 
+
+
+        ViewS(isShowing, algoAnimation, menuAnimation)
+    }
+
+
+@Composable
+fun Navigation(content : @Composable() () -> Unit) {
+    val navController = rememberNavController()
+    val isShowing = remember { mutableStateOf(false) }
     Scaffold(
         topBar = { TopBar(isShowing) }
     ) {
-        Menu()
-        ViewS(isShowing, algoAnimation, menuAnimation)
+        Menu(
+            showmenu = { isShowing.value = false },
+            navController = navController
+        )
+
+        NavHost(navController = navController, startDestination = "principal") {
+            composable("principal") {
+                MenuDrawer(navController, isShowing)
+            }
+            composable("page2") {
+                Page2()
+                isShowing.value = false
+            }
+        }
     }
 }
 
 
-@Composable
-@Preview
-fun MenuDrawer_Preview(){
-    MenuDrawer()
-}
+//
+//@Composable
+//@Preview
+//fun MenuDrawer_Preview(){
+//    MenuDrawer(navController)
+//}

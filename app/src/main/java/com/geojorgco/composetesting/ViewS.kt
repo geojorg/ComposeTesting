@@ -21,9 +21,7 @@ fun ViewS(isShowing: MutableState<Boolean>, algoAnimation: IntOffset, menuAnimat
             .fillMaxHeight()
             .fillMaxWidth()
             .scale(menuAnimation)
-            .offset {
-                algoAnimation
-            }
+            .offset { algoAnimation }
             .clip(if (isShowing.value) RoundedCornerShape(20.dp) else RoundedCornerShape(0.dp))
             .background(Color.LightGray)
     ) {
