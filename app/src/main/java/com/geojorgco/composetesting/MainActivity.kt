@@ -20,7 +20,6 @@ import com.geojorgco.composetesting.ui.theme.ComposeTestingTheme
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-import java.util.concurrent.TimeUnit
 
 @ExperimentalAnimationApi
 @ExperimentalComposeUiApi
@@ -33,9 +32,7 @@ class MainActivity : ComponentActivity() {
             ComposeTestingTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-                    Navigation(){
-
-                    }
+                    Navigation()
                 }
             }
         }
@@ -61,19 +58,20 @@ fun MenuDrawer(navController: NavHostController, isShowing: MutableState<Boolean
         targetValue = if (isShowing.value) 0.8f else 1f,
         animationSpec = tween(durationMillis = 200,easing = LinearEasing)
     )
-        ViewS(isShowing, algoAnimation, menuAnimation)
-    }
+    HomeView(isShowing, algoAnimation, menuAnimation)
+}
 
 
 @ExperimentalAnimationApi
 @Composable
-fun Navigation(content : @Composable() () -> Unit) {
+fun Navigation() {
     val navController = rememberAnimatedNavController()
     val isShowing = remember { mutableStateOf(false) }
+
     val name = remember { mutableStateOf("Baloto")}
     var topBarv : @Composable() () -> Unit = {TopBar(isShowing, name)}
 
-    val currentRoute = navController.currentBackStackEntry?.destination?.route
+
     val navBackStackEntry by navController.currentBackStackEntryAsState()
 
     val name2 = remember { mutableStateOf("Revancha")}
@@ -90,7 +88,7 @@ fun Navigation(content : @Composable() () -> Unit) {
 
     Scaffold(
 
-            topBar = { topBarv() }
+        topBar = { topBarv() }
 
 
     ) {
