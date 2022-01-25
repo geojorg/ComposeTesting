@@ -81,7 +81,7 @@ fun Navigation() {
         "principal"->{
             topBarv = { TopBar(isShowing, name) }
         }
-        "page2"->{
+        "Pagina 2"->{
             topBarv = { TopBar(isShowing, name2) }
         }
     }

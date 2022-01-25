@@ -37,12 +37,12 @@ fun Menu(showmenu : ()-> Unit, navController: NavController) {
         Button(
             onClick = {showmenu()}
         ){
-            Text("Cerrar Bentana")
+            Text("Close")
         }
         Button(
             onClick = {navController.navigate("page2")}
         ){
-            Text("pagina2")
+            Text("Pagina 2")
         }
     }
 }
