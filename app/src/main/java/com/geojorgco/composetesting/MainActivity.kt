@@ -16,6 +16,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 
 import com.geojorgco.composetesting.topbar.TopBar
+import com.geojorgco.composetesting.ui.page3.Page3
 import com.geojorgco.composetesting.ui.theme.ComposeTestingTheme
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
@@ -131,6 +132,24 @@ fun Navigation() {
                 }
             ) {
                 Page2()
+                isShowing.value = false
+            }
+            composable(
+                route = "page3",
+                enterTransition =  {_,_ ->
+                    slideInHorizontally( initialOffsetX   = {1000}, animationSpec = tween(
+                        durationMillis = 400,
+                        easing = FastOutSlowInEasing
+                    ))
+                },
+                popExitTransition = {_,_ ->
+                    slideOutHorizontally(targetOffsetX = {1000}, animationSpec = tween(
+                        durationMillis = 400,
+                        easing = FastOutSlowInEasing
+                    ))
+                }
+            ) {
+                Page3()
                 isShowing.value = false
             }
         }

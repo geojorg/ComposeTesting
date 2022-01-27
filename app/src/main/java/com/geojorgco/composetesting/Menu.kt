@@ -44,5 +44,10 @@ fun Menu(showmenu : ()-> Unit, navController: NavController) {
         ){
             Text("Pagina 2")
         }
+        Button(
+            onClick = {navController.navigate("page3")}
+        ){
+            Text("Pagina 3")
+        }
     }
 }
