@@ -21,7 +21,7 @@ fun Menu(showmenu : ()-> Unit, navController: NavController) {
     Column(modifier = Modifier
         .fillMaxHeight()
         .fillMaxWidth()
-        .background(Color.Black)
+        .background(Color.Transparent)
     ) {
         Text(
             "Baloto Menu",
@@ -37,12 +37,17 @@ fun Menu(showmenu : ()-> Unit, navController: NavController) {
         Button(
             onClick = {showmenu()}
         ){
-            Text("Close")
+            Text("Pagina 1")
         }
         Button(
             onClick = {navController.navigate("page2")}
         ){
             Text("Pagina 2")
+        }
+        Button(
+            onClick = {navController.navigate("page3")}
+        ){
+            Text("Pagina 3")
         }
     }
 }

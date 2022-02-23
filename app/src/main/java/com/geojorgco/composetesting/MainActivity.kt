@@ -84,6 +84,9 @@ fun Navigation() {
         "Pagina 2"->{
             topBarv = { TopBar(isShowing, name2) }
         }
+        "Pagina 3"->{
+            topBarv = { TopBar(isShowing, name2) }
+        }
     }
 
     Scaffold(
@@ -100,13 +103,13 @@ fun Navigation() {
         AnimatedNavHost(navController = navController, startDestination = "principal") {
             composable(
                 route = "principal",
-                exitTransition =  {_,_ ->
-                    slideOutHorizontally(targetOffsetX = {-1000}, animationSpec = tween(
-                        durationMillis = 400,
+                exitTransition =  {
+                    slideOutHorizontally(targetOffsetX = {-it}, animationSpec = tween(
+                        durationMillis = 350,
                         easing = FastOutSlowInEasing
                     ))
                 },
-                popEnterTransition = {_,_ ->
+                popEnterTransition = {
                     slideInHorizontally( initialOffsetX   = {-1000}, animationSpec = tween(
                         durationMillis = 400,
                         easing = FastOutSlowInEasing
@@ -117,13 +120,13 @@ fun Navigation() {
             }
             composable(
                 route = "page2",
-                enterTransition =  {_,_ ->
+                enterTransition =  {
                     slideInHorizontally( initialOffsetX   = {1000}, animationSpec = tween(
                         durationMillis = 400,
                         easing = FastOutSlowInEasing
                     ))
                 },
-                popExitTransition = {_,_ ->
+                popExitTransition = {
                     slideOutHorizontally(targetOffsetX = {1000}, animationSpec = tween(
                         durationMillis = 400,
                         easing = FastOutSlowInEasing
@@ -131,6 +134,24 @@ fun Navigation() {
                 }
             ) {
                 Page2()
+                isShowing.value = false
+            }
+            composable(
+                route = "page3",
+                enterTransition =  {
+                    slideInHorizontally( initialOffsetX   = {1000}, animationSpec = tween(
+                        durationMillis = 400,
+                        easing = FastOutSlowInEasing
+                    ))
+                },
+                popExitTransition = {
+                    slideOutHorizontally(targetOffsetX = {1000}, animationSpec = tween(
+                        durationMillis = 400,
+                        easing = FastOutSlowInEasing
+                    ))
+                }
+            ) {
+                NumberPadScreen()
                 isShowing.value = false
             }
         }
